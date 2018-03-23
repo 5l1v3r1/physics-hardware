@@ -1,0 +1,8 @@
+events.stream off
+
+set api.rest.username {{USERNAME}}
+set api.rest.password {{PASSWORD}}
+
+
+net.probe on
+api.rest on
