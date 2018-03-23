@@ -9,6 +9,10 @@ It works the same way as a botnet by receiving remote commands.
   go get github.com/graniet/physics-hardware
 ```
 
+## command & control
+
+You can check [repository](https://github.com/graniet/physics-command) of command & control
+
 ## requirement
 
 You can download a released [binary](https://github.com/graniet/physics-hardware/releases) or create your custom with source code, please make sure you have correctly configured golang environnement with **Go >= 1.8**
