@@ -11,7 +11,7 @@ It works the same way as a botnet by receiving remote commands.
 
 ## requirement
 
-You can download a released binary or create your custom with source code, please make sure you have correctly configured golang environnement with **Go >= 1.8**
+You can download a released [binary](https://github.com/graniet/physics-hardware/releases) or create your custom with source code, please make sure you have correctly configured golang environnement with **Go >= 1.8**
 
   + apt-get install libpcap0.8-dev
   + go get github.com/bettercap/bettercap
