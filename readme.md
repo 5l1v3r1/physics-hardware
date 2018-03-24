@@ -24,3 +24,8 @@ You can download a released [binary](https://github.com/graniet/physics-hardware
 ## wiki
 
 You can check documentation of project [here](https://github.com/graniet/physics-hardware/wiki)
+
+
+## Thanks
+
+@evilsocket for the new Bettercap version with a rest api.
