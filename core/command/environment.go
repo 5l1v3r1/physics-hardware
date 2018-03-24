@@ -8,5 +8,3 @@ var (
 	CcGATE = "gate/"
 	CcKey  = "3aec5d905cb2eb44a4d2a9bdbbef7705"
 )
-
-

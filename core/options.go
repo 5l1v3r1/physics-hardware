@@ -7,9 +7,9 @@ import (
 	"github.com/graniet/physics-hardware/core/command"
 )
 
-func parseArguments(){
+func parseArguments() {
 
-	ccHost := flag.String("cchost", "", "command & control host e.x: http://192.168.0.14:8080/ " + RED + "required" + RESET)
+	ccHost := flag.String("cchost", "", "command & control host e.x: http://192.168.0.14:8080/ "+RED+"required"+RESET)
 	ccGate := flag.String("ccgate", "gate/", "command & control gate e.x: gate/")
 	webservice := flag.Bool("webservice", false, "load web server with root path webserver.")
 	flag.Parse()
@@ -20,8 +20,8 @@ func parseArguments(){
 	AskFlag = false
 }
 
-func checkFlags() bool{
-	if AskFlag == false{
+func checkFlags() bool {
+	if AskFlag == false {
 		return true
 	} else {
 		parseArguments()

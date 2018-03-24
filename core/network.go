@@ -1,28 +1,28 @@
 package core
 
 import (
+	"bytes"
+	"crypto/tls"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
-	"fmt"
-	"crypto/tls"
-	"io/ioutil"
-	"encoding/json"
-	"bytes"
-	"time"
 	"os"
-	"strings"
-	"runtime"
 	"path"
+	"runtime"
+	"strings"
+	"time"
 )
 
-func getLocal() (string, bool){
+func getLocal() (string, bool) {
 	addrs, _ := net.InterfaceAddrs()
 
 	for _, networdAddress := range addrs {
 
 		addr, status := networdAddress.(*net.IPNet)
 
-		if status && !addr.IP.IsLoopback(){
+		if status && !addr.IP.IsLoopback() {
 			if addr.IP.To4() != nil {
 				return addr.IP.String(), true
 			}
@@ -31,7 +31,7 @@ func getLocal() (string, bool){
 	return "", false
 }
 
-func generateTpl() bool{
+func generateTpl() bool {
 
 	_, programFile, _, _ := runtime.Caller(0)
 	programDirectory := path.Dir(programFile)
@@ -50,13 +50,13 @@ func generateTpl() bool{
 
 			if strings.Contains(line, "{{PCAP_NAME}}") {
 
-				lines[key] = strings.Replace(line, "{{PCAP_NAME}}",  pcapName, 2)
+				lines[key] = strings.Replace(line, "{{PCAP_NAME}}", pcapName, 2)
 				configuration += 1
 			}
 		}
 
-		file, err := os.OpenFile(programDirectory + "/../webserver/index.html", os.O_RDWR|os.O_CREATE, 0777)
-		errChmod := os.Chmod(programDirectory + "/../webserver/index.html", 0777)
+		file, err := os.OpenFile(programDirectory+"/../webserver/index.html", os.O_RDWR|os.O_CREATE, 0777)
+		errChmod := os.Chmod(programDirectory+"/../webserver/index.html", 0777)
 
 		if errChmod != nil {
 			fmt.Println(p_WARNING("file can't be writable."))
@@ -77,7 +77,7 @@ func generateTpl() bool{
 func loadModules(api_url string) {
 	if serverInit == false && userWebService {
 
-		sendCmd(api_url, "set http.server.path "+ programDirectory +"/../webserver/")
+		sendCmd(api_url, "set http.server.path "+programDirectory+"/../webserver/")
 		sendCmd(api_url, "http.server on ")
 		fmt.Println(P_TIME(GREEN, "Web server has been started."))
 		//generateTpl()
@@ -85,18 +85,18 @@ func loadModules(api_url string) {
 	}
 	if sniffingInit == false {
 
-		_, err := os.OpenFile(programDirectory + "/../webserver/output/" + pcapName, os.O_RDWR|os.O_CREATE, 0777)
+		_, err := os.OpenFile(programDirectory+"/../webserver/output/"+pcapName, os.O_RDWR|os.O_CREATE, 0777)
 		if err != nil {
 			fmt.Println(P_ERROR("Can't write PCAP file."))
 			os.Exit(1)
 		}
-		errChmod := os.Chmod(programDirectory + "/../webserver/output/"+pcapName, 0777)
+		errChmod := os.Chmod(programDirectory+"/../webserver/output/"+pcapName, 0777)
 
 		if errChmod != nil {
 			fmt.Println(P_ERROR("pcap file can't be writable."))
 			os.Exit(1)
 		}
-		sendCmd(api_url, "set net.sniff.output "+ programDirectory +"/../webserver/output/"+pcapName)
+		sendCmd(api_url, "set net.sniff.output "+programDirectory+"/../webserver/output/"+pcapName)
 		sendCmd(api_url, "set net.sniff.verbose false")
 		sendCmd(api_url, "set net.sniff.local true")
 		sendCmd(api_url, "net.sniff on")
@@ -108,7 +108,7 @@ func loadModules(api_url string) {
 func getEvent(api_url string, nb string) {
 	apiUrlCpl = api_url
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	req, err := http.NewRequest("GET", "https://"+ api_url +":8083/api/events?n=" + string(nb), nil)
+	req, err := http.NewRequest("GET", "https://"+api_url+":8083/api/events?n="+string(nb), nil)
 	if err != nil {
 		fmt.Println(P_ERROR("We can't connect to wifi (1)."))
 		loadInteraction()
@@ -137,10 +137,10 @@ func getEvent(api_url string, nb string) {
 
 }
 
-func sendGET(api_url string, command string) []byte{
+func sendGET(api_url string, command string) []byte {
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	req, err := http.NewRequest("GET", "https://"+ api_url +":8083" + command, nil)
+	req, err := http.NewRequest("GET", "https://"+api_url+":8083"+command, nil)
 	if err != nil {
 		// handle err
 	}
@@ -177,7 +177,7 @@ func sendCmd(api_url string, command string) {
 	} else {
 		body := bytes.NewReader(payloadBytes)
 
-		req, err := http.NewRequest("POST", "https://" + api_url + ":8083/api/session", body)
+		req, err := http.NewRequest("POST", "https://"+api_url+":8083/api/session", body)
 		if err != nil {
 			fmt.Printf("server not responding %s", err.Error())
 		} else {
@@ -193,4 +193,3 @@ func sendCmd(api_url string, command string) {
 		}
 	}
 }
-

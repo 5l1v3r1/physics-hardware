@@ -1,25 +1,25 @@
 package core
 
 import (
-	"fmt"
-	"os/exec"
-	"strings"
-	"os"
-	"runtime"
-	"path"
-	"io/ioutil"
-	"time"
-	"math/rand"
-	"crypto/sha1"
-	"encoding/hex"
 	"bufio"
-	"net/http"
+	"crypto/sha1"
 	"crypto/tls"
+	"encoding/hex"
+	"fmt"
+	"io/ioutil"
+	"math/rand"
+	"net/http"
+	"os"
+	"os/exec"
+	"path"
+	"runtime"
+	"strings"
+	"time"
 
 	"github.com/graniet/physics-hardware/core/command"
 )
 
-func CheckRoot(){
+func CheckRoot() {
 	if os.Getenv("SUDO_USER") == "" {
 
 		fmt.Println(P_ERROR("Please run software as root."))
@@ -32,8 +32,8 @@ func checkPasswd() {
 	input := bufio.NewScanner(os.Stdin)
 	user_input := ""
 
-	for passwordAsk == false{
-		fmt.Print("(", P_SIMPLE(YELLOW, "physics-iot") + ") please enter password: ")
+	for passwordAsk == false {
+		fmt.Print("(", P_SIMPLE(YELLOW, "physics-iot")+") please enter password: ")
 		input.Scan()
 		user_input = input.Text()
 
@@ -48,22 +48,20 @@ func checkPasswd() {
 		}
 	}
 
-
-
 }
 
 func checkInternet() {
 
 	time.Sleep(1000 * time.Millisecond)
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	req , err := http.NewRequest("GET", "https://facebook.com", nil)
+	req, err := http.NewRequest("GET", "https://facebook.com", nil)
 	if err != nil {
 
 		fmt.Println(P_TIME(RED, "We can't connect to wifi."))
 		checkInternet()
 	}
 
-	_,errDo := http.DefaultClient.Do(req)
+	_, errDo := http.DefaultClient.Do(req)
 	if errDo != nil {
 
 		fmt.Println(P_TIME(RED, "We can't connect to wifi."))
@@ -91,7 +89,7 @@ func GenerateCap() {
 		os.Exit(1)
 	} else {
 
-		completPath     := programDirectory + "/../template/api_rest.txt"
+		completPath := programDirectory + "/../template/api_rest.txt"
 		fileInformation, errors := ioutil.ReadFile(completPath)
 
 		if errors != nil {
@@ -115,8 +113,8 @@ func GenerateCap() {
 			}
 
 			if configuration >= 2 {
-				file, err := os.OpenFile(programDirectory + "/../template/start.cap", os.O_RDWR|os.O_CREATE, 0777)
-				errChmod := os.Chmod(programDirectory + "/../template/start.cap", 0777)
+				file, err := os.OpenFile(programDirectory+"/../template/start.cap", os.O_RDWR|os.O_CREATE, 0777)
+				errChmod := os.Chmod(programDirectory+"/../template/start.cap", 0777)
 
 				if errChmod != nil {
 					fmt.Println(p_WARNING("file can't be writable."))
@@ -150,7 +148,7 @@ func Running() {
 
 	//CheckFlag
 
-	if !checkFlags(){
+	if !checkFlags() {
 		os.Exit(1)
 	}
 
@@ -169,7 +167,7 @@ func Running() {
 	}
 
 	output := string(out)
-	pids   := strings.Split(output, "\n")
+	pids := strings.Split(output, "\n")
 
 	// Check a count of process id
 	if len(pids) < 2 {
@@ -182,7 +180,7 @@ func Running() {
 
 		_, programFile, _, _ := runtime.Caller(0)
 		programDirectory := path.Dir(programFile)
-		cmd := exec.Command("bettercap" ,"-caplet", programDirectory + "/../template/start.cap", "-silent")
+		cmd := exec.Command("bettercap", "-caplet", programDirectory+"/../template/start.cap", "-silent")
 
 		// Configure output to /dev/null
 		null, _ := os.Open(os.DevNull)
@@ -202,7 +200,7 @@ func Running() {
 		Running()
 	} else {
 
-		if(pcapName == "") {
+		if pcapName == "" {
 
 			pcapName = randSeq(6) + ".pcap"
 		}
@@ -217,10 +215,9 @@ func Running() {
 			fmt.Println(P_INFO("Checking devices on network"))
 		}
 		time.Sleep(1000000 * time.Microsecond)
-		command.SendEvent("Physics hardware started","")
+		command.SendEvent("Physics hardware started", "")
 		getEvent(localIP, "50")
 
 	}
-
 
 }

@@ -1,14 +1,14 @@
 package core
 
 import (
-	"time"
-	"strings"
 	"fmt"
+	"strings"
+	"time"
 
 	"github.com/graniet/physics-hardware/core/command"
 )
 
-func viewWifi() []byte{
+func viewWifi() []byte {
 
 	sendCmd(apiUrlCpl, "wifi.recon on")
 	time.Sleep(5000 * time.Millisecond)
@@ -25,7 +25,7 @@ func checkCommand(user_command string) {
 
 	if user_command == "physics.pcap.read" {
 
-		command.SendEvent("command found (physics.pcap.read)","")
+		command.SendEvent("command found (physics.pcap.read)", "")
 		if userDebug == true {
 			command.ReadPCAP(true)
 		} else {
@@ -33,27 +33,27 @@ func checkCommand(user_command string) {
 		}
 	} else if strings.Contains(user_command, "physics.pcap.filter") {
 
-		command.SendEvent("command found (physics.pcap.filter)","")
+		command.SendEvent("command found (physics.pcap.filter)", "")
 		filterList := strings.Split(user_command, "physics.pcap.filter")
 		if len(filterList) > 0 {
 			filter := filterList[1]
 			filter = strings.TrimSpace(filter)
 			command.PacketFilter = filter
-			command.SendEvent("Update filter to : " + filter, "")
+			command.SendEvent("Update filter to : "+filter, "")
 
-			if userDebug == true{
+			if userDebug == true {
 				fmt.Println("Filter updated: " + filter)
 			}
 		} else {
 
 			command.SendEvent("Filter not found or incorrect setup.", "")
-			if userDebug == true{
+			if userDebug == true {
 				fmt.Println("Filter not found or incorrect setup")
 			}
 		}
 	} else if user_command == "physics.wifi.list" {
 
-		command.SendEvent("command found (physics.wifi.list)","")
+		command.SendEvent("command found (physics.wifi.list)", "")
 		data := viewWifi()
 		command.ReadWifi(string(data))
 	} else if user_command == "physics.get.env" {

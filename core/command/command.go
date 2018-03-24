@@ -1,23 +1,22 @@
 package command
 
 import (
-	"net/http"
-	"crypto/tls"
-	"io/ioutil"
-	"fmt"
-	"encoding/json"
-	"strconv"
-	"bytes"
 	"bufio"
-	"time"
+	"bytes"
+	"crypto/tls"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/http/httputil"
+	"strconv"
+	"time"
 
 	"github.com/distatus/battery"
-	"github.com/google/gopacket/pcap"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
+	"github.com/google/gopacket/pcap"
 )
-
 
 type listen struct {
 	Error   string `json:"error"`
@@ -28,13 +27,13 @@ type listen struct {
 }
 
 type postData struct {
-	InsertType string `json:"insertType"`
-	Data map[string]string `json:"data"`
+	InsertType string            `json:"insertType"`
+	Data       map[string]string `json:"data"`
 }
 
-func sendGet(action string) ([]byte, bool){
+func sendGet(action string) ([]byte, bool) {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	req, err := http.NewRequest("GET", CcHOST + CcGATE + action, nil)
+	req, err := http.NewRequest("GET", CcHOST+CcGATE+action, nil)
 
 	if err != nil {
 		fmt.Printf("server not responding %s", err.Error())
@@ -54,13 +53,13 @@ func sendGet(action string) ([]byte, bool){
 
 func SendEvent(title string, body string) {
 
-	if body == ""{
+	if body == "" {
 		body = title
 		title = "New event"
 	}
 	data := postData{"sendEvent", map[string]string{
 		"event_title": title,
-		"event_body": body,
+		"event_body":  body,
 	}}
 	sendPost(data)
 }
@@ -69,14 +68,14 @@ func sendPost(post postData) {
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	postJson, err := json.Marshal(post)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	postContent := bytes.NewBuffer(postJson)
-	http.Post(CcHOST + CcGATE + "send", "application/json", postContent)
+	http.Post(CcHOST+CcGATE+"send", "application/json", postContent)
 	/*//Check response buffer body.
 	buf, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(buf))*/
-
-
 
 }
 
@@ -125,19 +124,18 @@ func ReadPCAP(verbose bool) {
 						req.ParseForm()
 						requestPost = req.Form.Encode()
 					}
-					data := postData{ "sendLogs", map[string]string{
-						"log_layers":"TCP",
-						"log_type": "HTTP",
-						"log_dest": ip.DstIP.String(),
-						"log_src": ip.SrcIP.String(),
-						"log_host": req.Host,
-						"log_url": req.RequestURI,
-						"log_method": req.Method,
-						"log_form": requestPost,
-						"log_cookie": "",
-						"log_headers":"",
+					data := postData{"sendLogs", map[string]string{
+						"log_layers":      "TCP",
+						"log_type":        "HTTP",
+						"log_dest":        ip.DstIP.String(),
+						"log_src":         ip.SrcIP.String(),
+						"log_host":        req.Host,
+						"log_url":         req.RequestURI,
+						"log_method":      req.Method,
+						"log_form":        requestPost,
+						"log_cookie":      "",
+						"log_headers":     "",
 						"log_requestdump": string(requestDump),
-
 					}}
 					if verbose == true {
 						fmt.Println(P_SIMPLE(YELLOW, string(requestDump)))
@@ -152,7 +150,7 @@ func ReadPCAP(verbose bool) {
 	}
 }
 
-func ListenCC() string{
+func ListenCC() string {
 
 	resp, err := sendGet("listen")
 	if err == false {
