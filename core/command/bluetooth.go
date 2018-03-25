@@ -44,8 +44,8 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int) {
 	
 		fmt.Println("UUID: ", p.ID())
-		fmt.Println("Major: ", p)
-		fmt.Println("Minor: ", a)
+		fmt.Println("Major: ", p.Name())
+		fmt.Println("Minor: ", a.LocalName)
 		fmt.Println("RSSI: ", rssi)
 }
 
