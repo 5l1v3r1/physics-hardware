@@ -25,8 +25,13 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
 	if p.Name() != "" {
 		fmt.Println("device: " + p.Name())
-		p.Device().StopScanning()
 	}
+
+	fmt.Println(GetStatus())
+
+}
+
+func onPeriphDisconnected(p gatt.Peripheral) {
 
 }
 
@@ -36,7 +41,10 @@ func BleRecon() {
 		log.Fatalf("Failed to open device, err: %s\n", err)
 		return
 	}
-	device.Handle(gatt.PeripheralDiscovered(onPeripheralDiscovered))
+	device.Handle(
+			gatt.PeripheralDiscovered(onPeripheralDiscovered),
+		)
 	device.Init(onStateChanged)
-	select {}
+
+	//select {}
 }
