@@ -7,7 +7,6 @@ import (
 
 	"github.com/paypal/gatt"
 	"github.com/paypal/gatt/examples/option"
-	"encoding/json"
 )
 
 type BleList map[string]string
