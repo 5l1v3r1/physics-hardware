@@ -80,7 +80,6 @@ func sendPost(post postData) {
 }
 
 func GetStatus() (bool){
-	fmt.Println("Check status")
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	req, err := http.NewRequest("GET", CcHOST+CcGATE+"checkStatus", nil)
 
