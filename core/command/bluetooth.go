@@ -30,7 +30,7 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 }
 
 func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
-		deviceList[p.ID()] = p.Name()
+		fmt.Println("device: " + p.Name())
 }
 
 func BleRecon() {
