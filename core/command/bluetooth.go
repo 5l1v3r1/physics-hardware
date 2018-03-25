@@ -19,11 +19,11 @@ type BleDevise struct{
 
 func sendToPost(){
 	for _, value := range(DeviseList) {
+		fmt.Println(P_TIME(GREEN, "New device found:" + value.Name))
 		data := postData{"insertBLE", map[string]string{
 			"BleName": value.Name,
 			"BleUUID": value.UUID,
 		}}
-
 		sendPost(data)
 	}
 }
