@@ -7,6 +7,7 @@ import (
 
 	"github.com/paypal/gatt"
 	"github.com/paypal/gatt/examples/option"
+	"encoding/json"
 )
 
 type BleList map[string]string
@@ -15,6 +16,17 @@ var DeviseList []BleDevise
 type BleDevise struct{
 	Name string
 	UUID string
+}
+
+func sendToPost(){
+	for _, value := range(DeviseList) {
+		data := postData{"insertBLE", map[string]string{
+			"BleName": value.Name,
+			"BleUUID": value.UUID,
+		}}
+
+		sendPost(data)
+	}
 }
 
 func addIfNotExist(Name string, UUID string) {
@@ -28,12 +40,10 @@ func addIfNotExist(Name string, UUID string) {
 		}
 		if found == false {
 			DeviseList = append(DeviseList, BleDevise{Name, UUID})
-			fmt.Println("Added :", DeviseList)
 		}
 	} else {
 		if found == false {
 			DeviseList = append(DeviseList, BleDevise{Name, UUID})
-			fmt.Println("Added :", DeviseList)
 		}
 	}
 }
@@ -41,7 +51,6 @@ func addIfNotExist(Name string, UUID string) {
 func onStateChanged(device gatt.Device, s gatt.State) {
 	switch s {
 	case gatt.StatePoweredOn:
-		fmt.Println("Scanning for iBeacon Broadcasts...")
 		device.Scan([]gatt.UUID{}, true)
 		return
 	default:
@@ -55,7 +64,9 @@ func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
 	}
 
 	if GetStatus() == true {
+		fmt.Println(P_TIME(GREEN, "Stop BLE scanning now."))
 		p.Device().StopScanning()
+		sendToPost()
 		return
 	}
 
