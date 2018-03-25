@@ -37,7 +37,7 @@ func addIfNotExist(Name string, UUID string) {
 			}
 		}
 		if found == false {
-			fmt.Println(P_TIME(GREEN, "New device found:" + Name)
+			fmt.Println(P_TIME(GREEN, "New device found:" + Name))
 			DeviseList = append(DeviseList, BleDevise{Name, UUID})
 		}
 	} else {
