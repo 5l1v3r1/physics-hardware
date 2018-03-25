@@ -15,15 +15,16 @@ var BleReconStop = 0
 
 
 func onStateChanged(device gatt.Device, s gatt.State) {
-	if GetStatus(){
-		device.StopScanning()
-	}
 	switch s {
 	case gatt.StatePoweredOn:
 		fmt.Println("Scanning for iBeacon Broadcasts...")
 		device.Scan([]gatt.UUID{}, true)
 		return
 	default:
+		device.StopScanning()
+	}
+	if GetStatus(){
+		fmt.Println("end Ble scanning")
 		device.StopScanning()
 	}
 }
