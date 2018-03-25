@@ -19,7 +19,6 @@ type BleDevise struct{
 
 func sendToPost(){
 	for _, value := range(DeviseList) {
-		fmt.Println(P_TIME(GREEN, "New device found:" + value.Name))
 		data := postData{"insertBLE", map[string]string{
 			"BleName": value.Name,
 			"BleUUID": value.UUID,
@@ -59,6 +58,7 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 
 func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
 	if p.Name() != "" {
+		fmt.Println(P_TIME(GREEN, "New device found:" + p.Name()))
 		addIfNotExist(p.Name(), p.ID())
 	}
 
