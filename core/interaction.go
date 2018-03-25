@@ -61,6 +61,11 @@ func checkCommand(user_command string) {
 		bettercapEvent := sendGET(apiUrlCpl, "/api/session/env")
 		command.ReadEnvironment(string(bettercapEvent))
 		command.SendEvent("command found (physics.get.env)", "")
+	} else if user_command == "physics.ble.list" {
+
+		command.SendEvent("command found (physics.ble.list)", "")
+		command.SendEvent("Start scanning of BLE devices.", "")
+		command.ReadDevices()
 	}
 }
 
