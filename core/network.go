@@ -67,7 +67,7 @@ func generateTpl() bool {
 
 		file.WriteString(strings.Join(lines, "\n"))
 		file.Close()
-		if userDebug {
+		if UserDebug {
 			fmt.Println(P_SUCCESS("PCAP name Configuration as been successfully ended"))
 		}
 	}
