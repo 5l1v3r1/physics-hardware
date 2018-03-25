@@ -79,6 +79,29 @@ func sendPost(post postData) {
 
 }
 
+func GetStatus() (bool){
+	fmt.Println("Check status")
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	req, err := http.NewRequest("GET", CcHOST+CcGATE+"checkStatus", nil)
+
+	if err != nil {
+		fmt.Printf("server not responding %s", err.Error())
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+
+		fmt.Printf("server not responding %s", err.Error())
+	} else {
+
+		defer resp.Body.Close()
+		body, _ := ioutil.ReadAll(resp.Body)
+		if string(body) == "1"{
+			return true
+		}
+	}
+	return false
+}
+
 func SendBattery() {
 	bat, err := battery.GetAll()
 	if err == nil {

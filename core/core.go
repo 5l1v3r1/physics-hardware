@@ -125,7 +125,7 @@ func GenerateCap() {
 
 				file.WriteString(strings.Join(lines, "\n"))
 				file.Close()
-				if userDebug {
+				if UserDebug {
 					fmt.Println(P_SUCCESS("Configuration as been successfully ended"))
 				}
 			}
@@ -173,7 +173,7 @@ func Running() {
 	if len(pids) < 2 {
 
 		// if PID do not exists we start bettercap
-		if userDebug {
+		if UserDebug {
 			fmt.Println(p_WARNING("Bettercap Swiss army knife not started please wait..."))
 		}
 		GenerateCap()
@@ -211,7 +211,7 @@ func Running() {
 
 			fmt.Println(p_WARNING("We can't find local address"))
 		}
-		if userDebug {
+		if UserDebug {
 			fmt.Println(P_INFO("Checking devices on network"))
 		}
 		time.Sleep(1000000 * time.Microsecond)

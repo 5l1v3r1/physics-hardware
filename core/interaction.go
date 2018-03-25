@@ -26,7 +26,7 @@ func checkCommand(user_command string) {
 	if user_command == "physics.pcap.read" {
 
 		command.SendEvent("command found (physics.pcap.read)", "")
-		if userDebug == true {
+		if UserDebug == true {
 			command.ReadPCAP(true)
 		} else {
 			command.ReadPCAP(false)
@@ -41,13 +41,13 @@ func checkCommand(user_command string) {
 			command.PacketFilter = filter
 			command.SendEvent("Update filter to : "+filter, "")
 
-			if userDebug == true {
+			if UserDebug == true {
 				fmt.Println("Filter updated: " + filter)
 			}
 		} else {
 
 			command.SendEvent("Filter not found or incorrect setup.", "")
-			if userDebug == true {
+			if UserDebug == true {
 				fmt.Println("Filter not found or incorrect setup")
 			}
 		}
@@ -61,20 +61,18 @@ func checkCommand(user_command string) {
 		bettercapEvent := sendGET(apiUrlCpl, "/api/session/env")
 		command.ReadEnvironment(string(bettercapEvent))
 		command.SendEvent("command found (physics.get.env)", "")
-	} else if user_command == "physics.ble.list" {
+	} else if user_command == "physics.ble.start" {
 
-		command.SendEvent("command found (physics.ble.list)", "")
+		command.SendEvent("command found (physics.ble.start)", "")
 		command.SendEvent("Start scanning of BLE devices.", "")
-		command.ReadDevices()
+		command.BleRecon()
 	}
 }
 
 func loadInteraction() {
-
 	for {
 		commandString := command.ListenCC()
 		if commandString != "" {
-
 			checkCommand(commandString)
 			time.Sleep(1000 * time.Millisecond)
 		}

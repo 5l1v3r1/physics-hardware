@@ -19,7 +19,7 @@ var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 var (
 	UserPassword       = "51abb9636078defbf888d8457a7c76f85c8f114c" // Password (sha1)
 	UserPasswordAsking = false                                      // Ask password before run
-	userDebug          = true                                       // Enable debug verbose (fmt.println())
+	UserDebug          = true                                       // Enable debug verbose (fmt.println())
 	userWebService     = false                                      // (pwd) : /webserver/
 	AskFlag            = true
 )

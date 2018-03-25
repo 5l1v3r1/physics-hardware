@@ -2,35 +2,22 @@
 package command
 
 import (
-	"encoding/binary"
-	"encoding/hex"
-	"errors"
 	"log"
-	"strings"
 	"fmt"
 
 	"github.com/paypal/gatt"
 	"github.com/paypal/gatt/examples/option"
 )
 
-type iBeacon struct {
-	uuid  string
-	major uint16
-	minor uint16
-}
+type BleList map[string]string
+var deviceList = BleList{}
+var BleReconStop = 0
 
-func NewiBeacon(data []byte) (*iBeacon, error) {
-	if len(data) < 25 || binary.BigEndian.Uint32(data) != 0x4c000215 {
-		return nil, errors.New("Not an iBeacon")
-	}
-	beacon := new(iBeacon)
-	beacon.uuid = strings.ToUpper(hex.EncodeToString(data[4:8]) + "-" + hex.EncodeToString(data[8:10]) + "-" + hex.EncodeToString(data[10:12]) + "-" + hex.EncodeToString(data[12:14]) + "-" + hex.EncodeToString(data[14:20]))
-	beacon.major = binary.BigEndian.Uint16(data[20:22])
-	beacon.minor = binary.BigEndian.Uint16(data[22:24])
-	return beacon, nil
-}
 
 func onStateChanged(device gatt.Device, s gatt.State) {
+	if GetStatus(){
+		device.StopScanning()
+	}
 	switch s {
 	case gatt.StatePoweredOn:
 		fmt.Println("Scanning for iBeacon Broadcasts...")
@@ -41,15 +28,11 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 	}
 }
 
-func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int) {
-	
-		fmt.Println("UUID: ", p.ID())
-		fmt.Println("Major: ", p.Name())
-		fmt.Println("Minor: ", a.LocalName)
-		fmt.Println("RSSI: ", rssi)
+func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
+		deviceList[p.ID()] = p.Name()
 }
 
-func ReadDevices() {
+func BleRecon() {
 	device, err := gatt.NewDevice(option.DefaultClientOptions...)
 	if err != nil {
 		log.Fatalf("Failed to open device, err: %s\n", err)
