@@ -7,6 +7,7 @@ import (
 
 	"github.com/paypal/gatt"
 	"github.com/paypal/gatt/examples/option"
+	"golang.org/x/tools/go/gcimporter15/testdata"
 )
 
 type BleList map[string]string
@@ -37,10 +38,12 @@ func addIfNotExist(Name string, UUID string) {
 			}
 		}
 		if found == false {
+			fmt.Println(P_TIME(GREEN, "New device found:" + Name)
 			DeviseList = append(DeviseList, BleDevise{Name, UUID})
 		}
 	} else {
 		if found == false {
+			fmt.Println(P_TIME(GREEN, "New device found:" + Name))
 			DeviseList = append(DeviseList, BleDevise{Name, UUID})
 		}
 	}
@@ -58,7 +61,6 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 
 func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
 	if p.Name() != "" {
-		fmt.Println(P_TIME(GREEN, "New device found:" + p.Name()))
 		addIfNotExist(p.Name(), p.ID())
 	}
 
