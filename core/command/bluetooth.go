@@ -7,7 +7,6 @@ import (
 
 	"github.com/paypal/gatt"
 	"github.com/paypal/gatt/examples/option"
-	"golang.org/x/tools/go/gcimporter15/testdata"
 )
 
 type BleList map[string]string
