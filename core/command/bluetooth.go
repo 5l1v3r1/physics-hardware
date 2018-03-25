@@ -30,6 +30,11 @@ func addIfNotExist(Name string, UUID string) {
 			DeviseList = append(DeviseList, BleDevise{Name, UUID})
 			fmt.Println("Added :", DeviseList)
 		}
+	} else {
+		if found == false {
+			DeviseList = append(DeviseList, BleDevise{Name, UUID})
+			fmt.Println("Added :", DeviseList)
+		}
 	}
 }
 
