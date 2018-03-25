@@ -10,9 +10,6 @@ import (
 )
 
 type BleList map[string]string
-var deviceList = BleList{}
-var BleReconStop = 0
-
 
 func onStateChanged(device gatt.Device, s gatt.State) {
 	switch s {
@@ -23,14 +20,14 @@ func onStateChanged(device gatt.Device, s gatt.State) {
 	default:
 		device.StopScanning()
 	}
-	if GetStatus(){
-		fmt.Println("end Ble scanning")
-		device.StopScanning()
-	}
 }
 
 func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
+	if p.Name() != "" {
 		fmt.Println("device: " + p.Name())
+		p.Device().StopScanning()
+	}
+
 }
 
 func BleRecon() {
