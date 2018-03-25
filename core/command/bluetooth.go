@@ -27,7 +27,10 @@ func onPeripheralDiscovered(p gatt.Peripheral, a *gatt.Advertisement, rssi int){
 		fmt.Println("device: " + p.Name())
 	}
 
-	fmt.Println(GetStatus())
+	if GetStatus() == true {
+		p.Device().StopScanning()
+		return
+	}
 
 }
 
